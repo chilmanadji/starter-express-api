@@ -1,3 +1,5 @@
+const request = require('request');
+const querystring = require('querystring');
 var express = require('express');
 var router = express.Router();
 
@@ -94,6 +96,24 @@ router.get('/ethica/latest', function(req, res, next) {
     console.log("Error: " + err.message);
   });
 
+});
+
+router.get('/cek/:key', function(req, res, next) {
+  res.send(req.query.url);
+});
+
+router.get('/image', function(req, res, next) {
+  const url = req.query.url;
+   request({
+    url: url,
+    encoding: null
+  }, 
+  (err, resp, buffer) => {
+    if (!err && resp.statusCode === 200){
+      res.set("Content-Type", "image/jpeg");
+      res.send(resp.body);
+    }
+  });
 });
 
 router.get('*',function(req, res, next) {
