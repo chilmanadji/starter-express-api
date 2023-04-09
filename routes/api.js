@@ -44,9 +44,9 @@ router.get('/ethica/latest', function(req, res, next) {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
 
-  var datax = '';
+  var url = 'https://api.ethica.id/public/master_barang/loaddata_eksternal?customer_seq=0979&offset=0&is_ada_stok=T&order_by=tahun+DESC';
   const https = require('https');
-  https.get('https://api.ethica.id/public/master_barang/load_data_master', (resp) => {
+  https.get(url, (resp) => {
     let data = '';
 
     // A chunk of data has been received.
@@ -55,9 +55,7 @@ router.get('/ethica/latest', function(req, res, next) {
     });
 
     // The whole response has been received. Print out the result.
-    resp.on('end', () => {
-      datax = data;
-    //  console.log(data);
+    resp.on('end', () => { 
       res.send(data);
     });
 
