@@ -17,6 +17,32 @@ router.get('/ethica', function(req, res, next) {
   res.send('ethica data');
 });
 
+router.get('/ethica/loadmaster', function(req, res, next) {
+  res.statusCode = 200;
+   
+   
+  var url = 'https://api.ethica.id/public/master_barang/load_data_master';
+  const https = require('https');
+  https.get(url, (resp) => {
+    let data = '';
+
+    // A chunk of data has been received.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => { 
+      var result = JSON.parse(data);
+      res.header("Content-Type",'application/json');
+      res.send(JSON.stringify(result, null, 3));
+    });
+
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+});
+
 router.get('/ethica/loadproduct/:key', function(req, res, next) {
   res.statusCode = 200;
    
@@ -98,7 +124,7 @@ router.get('/ethica/latest', function(req, res, next) {
 
 });
 
-router.get('/cek/:key', function(req, res, next) {
+router.get('/cek', function(req, res, next) {
   res.send(req.query.url);
 });
 
