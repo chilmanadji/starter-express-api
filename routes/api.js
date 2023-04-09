@@ -15,6 +15,31 @@ router.get('/ethica', function(req, res, next) {
   res.send('ethica data');
 });
 
+router.get('/ethica/search/:search', function(req, res, next) {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+ 
+  var url = 'https://api.ethica.id/public/master_barang/loaddata_eksternal?customer_seq=0979&offset=0&search='+req.params.search;
+  const https = require('https');
+  https.get(url, (resp) => {
+    let data = '';
+
+    // A chunk of data has been received.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => { 
+      res.send(data);
+    });
+
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+
+});
+
 router.get('/ethica/latest', function(req, res, next) {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
