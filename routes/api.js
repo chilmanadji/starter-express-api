@@ -43,6 +43,31 @@ router.get('/ethica/loadmaster', function(req, res, next) {
   });
 });
 
+router.get('/ethica/detail/:id', function(req, res, next) {
+  res.statusCode = 200;
+   
+  var url = 'http://ethica.id/product-detail/attribute/'+req.params.id;
+  const https = require('http');
+  https.get(url, (resp) => {
+    let data = '';
+
+    // A chunk of data has been received.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => { 
+      var result = data;
+      res.header("Content-Type",'text/plain');
+      res.send(data);
+    });
+
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  }); 
+});
+
 router.get('/ethica/loadproduct/:key', function(req, res, next) {
   res.statusCode = 200;
    
@@ -137,6 +162,21 @@ router.get('/image', function(req, res, next) {
   (err, resp, buffer) => {
     if (!err && resp.statusCode === 200){
       res.set("Content-Type", "image/jpeg");
+      res.send(resp.body);
+    }
+  });
+});
+
+router.get('/muslim', function(req, res, next) {
+   var url = req.query.url;
+  // url = 'https://www.muslimgaleri.co.id/detail~rocella-gamis-khayra-olive-4xl-5xl~510~744';
+   request({
+    url: url,
+    encoding: null
+  }, 
+  (err, resp, buffer) => {
+    if (!err && resp.statusCode === 200){ 
+      res.set("Content-Type", "text/plain");
       res.send(resp.body);
     }
   });
