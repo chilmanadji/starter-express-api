@@ -17,6 +17,31 @@ router.get('/ethica', function(req, res, next) {
   res.send('ethica data');
 });
 
+router.get('/ethica/detail/:id', function(req, res, next) {
+  res.statusCode = 200;
+   
+  var url = 'http://ethica.id/product-detail/attribute/'+req.params.id;
+  const https = require('http');
+  https.get(url, (resp) => {
+    let data = '';
+
+    // A chunk of data has been received.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => { 
+      var result = data;
+      res.header("Content-Type",'text/plain');
+      res.send(data);
+    });
+
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  }); 
+});
+
 router.get('/ethica/loadmaster', function(req, res, next) {
   res.statusCode = 200;
    
@@ -43,30 +68,7 @@ router.get('/ethica/loadmaster', function(req, res, next) {
   });
 });
 
-router.get('/ethica/detail/:id', function(req, res, next) {
-  res.statusCode = 200;
-   
-  var url = 'http://ethica.id/product-detail/attribute/'+req.params.id;
-  const https = require('http');
-  https.get(url, (resp) => {
-    let data = '';
 
-    // A chunk of data has been received.
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    // The whole response has been received. Print out the result.
-    resp.on('end', () => { 
-      var result = data;
-      res.header("Content-Type",'text/plain');
-      res.send(data);
-    });
-
-  }).on("error", (err) => {
-    console.log("Error: " + err.message);
-  }); 
-});
 
 router.get('/ethica/loadproduct/:key', function(req, res, next) {
   res.statusCode = 200;
